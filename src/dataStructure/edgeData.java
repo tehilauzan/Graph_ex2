@@ -8,6 +8,15 @@ public class edgeData implements edge_data {
 	String info;
 	int tag;
 	
+	public edgeData (int src,int dest,double weight) 
+	{
+		this.src = src;
+		this.dest = dest;
+		this.weight = weight;
+		this.info = "";
+		this.tag = 0;
+	}
+	
 	public int getSrc() 
 	{
 		return this.src;

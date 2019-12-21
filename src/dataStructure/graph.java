@@ -35,8 +35,9 @@ public interface graph
  * @param src - the source of the edge.
  * @param dest - the destination of the edge.
  * @param w - positive weight representing the cost (aka time, price, etc) between src-->dest.
+ * @throws Exception 
  */
-	public void connect(int src, int dest, double w);
+	public void connect(int src, int dest, double w) throws Exception;
 	/**
 	 * This method return a pointer (shallow copy) for the
 	 * collection representing all the nodes in the graph. 

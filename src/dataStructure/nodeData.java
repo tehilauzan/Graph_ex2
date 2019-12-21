@@ -9,6 +9,20 @@ public class nodeData implements node_data {
 	double Weight;
 	String info;
 	int tag;
+	
+	public nodeData(nodeData node) 
+	{
+		this.key = node.key;
+		this.location = new Point3D (node.location);
+		this.Weight = node.Weight;
+		this.info = node.info;
+		this.tag = node.tag;
+	}
+	public nodeData (int key,double Weight) 
+	{
+		this.key= key;
+		this.Weight = Weight;
+	}
 
 	@Override
 	public int getKey() 
@@ -25,7 +39,7 @@ public class nodeData implements node_data {
 	@Override
 	public void setLocation(Point3D p) 
 	{
-		this.location = p;
+		this.location = new Point3D (p);
 	}
 
 	@Override
