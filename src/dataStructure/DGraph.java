@@ -1,25 +1,32 @@
 package dataStructure;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Hashtable;
+
+import org.w3c.dom.Node;
 
 public class DGraph implements graph
 {
+	Hashtable<Integer,node_data> node = new Hashtable<Integer,node_data>();
+	Hashtable<Integer , Hashtable <Integer,edge_data>> edge = new Hashtable<Integer , Hashtable <Integer,edge_data>>();
 
 	@Override
 	public node_data getNode(int key) 
 	{
-		return null;
+		return node.get(key);
 	}
 
 	@Override
 	public edge_data getEdge(int src, int dest) 
 	{
-		return null;
+		return edge.get(src).get(dest);
 	}
 
 	@Override
 	public void addNode(node_data n) 
 	{
+		node.put(n.getKey(), n);
 	
 	}
 
