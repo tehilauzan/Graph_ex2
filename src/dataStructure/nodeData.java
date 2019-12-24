@@ -18,10 +18,13 @@ public class nodeData implements node_data {
 		this.info = node.info;
 		this.tag = node.tag;
 	}
-	public nodeData (int key,double Weight) 
+	public nodeData (int key,double weight,int tag,Point3D p,String info) 
 	{
 		this.key= key;
 		this.Weight = Weight;
+        this.tag=tag;
+        this.location=new Point3D(p);
+        this.info=info;
 	}
 
 	@Override

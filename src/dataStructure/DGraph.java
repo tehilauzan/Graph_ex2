@@ -141,5 +141,15 @@ public class DGraph implements graph
 	{
 		return mc;
 	}
+	
+	public Hashtable getNodeHash()
+	{
+		return this.node;
+	}
+
+	public Hashtable getEdgeHash()
+	{
+		return this.edge;
+	}
 
 }
