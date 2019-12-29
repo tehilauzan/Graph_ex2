@@ -12,6 +12,7 @@ package algorithms;
  *
  */
 
+import java.io.IOException;
 import java.util.List;
 import dataStructure.graph;
 import dataStructure.node_data;
@@ -32,7 +33,7 @@ public interface graph_algorithms
 	 * Init a graph from file
 	 * @param file_name
 	 */
-	public void init(String file_name);
+	public void init(String file_name) ;
 	/** Saves the graph to a file.
 	 * 
 	 * @param file_name
