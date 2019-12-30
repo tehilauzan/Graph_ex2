@@ -5,7 +5,7 @@ this project represent data structure for directed graph. including data structu
 the project divide to four package:
 
 ## 1. algorithms package contains:
-  ### graph_algorithms (interface): represents the "regular" Graph Theory algorithms including:
+    ### graph_algorithms (interface): represents the "regular" Graph Theory algorithms including:
  * clone()
  * init(String file_name);
  * save(String file_name);
