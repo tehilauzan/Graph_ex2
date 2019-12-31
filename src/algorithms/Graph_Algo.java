@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.annotation.Target;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -142,6 +144,7 @@ public class Graph_Algo implements graph_algorithms{
        			if (sumEdgeAndSrc<weightDestNode) 
        			{
        				graph.getNode(currSpcEntry.getDest()).setWeight(sumEdgeAndSrc);
+       				graph.getNode(currSpcEntry.getDest()).setInfo(""+src.getKey());
        				src.setTag(1);
        				helpShortest(this.graph.getNode(currSpcEntry.getDest()), dest);
        			}
@@ -153,15 +156,48 @@ public class Graph_Algo implements graph_algorithms{
 	public List<node_data> shortestPath(int src, int dest) 
 	{
 		if(shortestPathDist(src, dest)==Double.POSITIVE_INFINITY) 
-			return null;
+			throw new RuntimeException("this two points aren't connected");
+		shortestPathDist(src,dest);
+		ArrayList<node_data> ans=new ArrayList<node_data>();
+		ans.add(graph.getNode(dest));
+		node_data curreNode = graph.getNode(dest);
+		while (!ans.contains(graph.getNode(src))) 
+		{
+			ans.add((node_data) this.graph.getNodeHash().get(Integer.valueOf(curreNode.getInfo())));
+			curreNode = (node_data) this.graph.getNodeHash().get(Integer.valueOf(curreNode.getInfo()));
+		}
 		
-		return null;
+		return ans;
 	}
 
 	@Override
 	public List<node_data> TSP(List<Integer> targets) 
 	{
-		return null;
+		if (targets.isEmpty() || !chackIfTargetsExist(targets)) 
+		{
+			throw new RuntimeException("targets list is empty or not all targets id's exsits in the graph");
+		}
+		ArrayList<node_data> ans = new ArrayList<node_data>();
+		if (targets.size()==1)
+		{
+			ans.add(this.graph.getNode(targets.get(0)));
+			return ans;
+		}
+		ArrayList <node_data> partialPath = new ArrayList<node_data>();
+		for (int target : targets) 
+		{
+			partialPath = (ArrayList<node_data>) shortestPath(target, target+1);
+			if (target != 0) 
+			{
+				partialPath.remove(0);
+			}
+			for (node_data currNode : partialPath) 
+			{
+				ans.add(currNode);
+			}
+			partialPath.clear();
+		}
+		return ans;
 	}
 		
 	@Override
@@ -188,6 +224,17 @@ public class Graph_Algo implements graph_algorithms{
 		return copiedGraph;
 	}
 	
+	public boolean chackIfTargetsExist(List<Integer> targets) 
+	{
+		for (int target: targets) 
+		{
+			if (this.graph.getNode(target)==null)
+			{
+				return false;
+			}	
+		}
+		return true;
+	}
 	private void vertexToInfinity() 
 	{
 		Iterator<node_data> iter = this.graph.getV().iterator();

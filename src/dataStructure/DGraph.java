@@ -26,6 +26,11 @@ public class DGraph implements graph
 	@Override
 	public node_data getNode(int key) 
 	{
+		if (!node.contains(key)) 
+		{
+			return null;
+			//throw new RuntimeException("this node doesn't exist");
+		}
 		return node.get(key);
 	}
 

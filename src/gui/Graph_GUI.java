@@ -3,14 +3,21 @@ import utils.Point3D;
 import utils.Range;
 import utils.StdDraw;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.swing.JFrame;
+
 import dataStructure.*;
 
-	public class Graph_GUI 
+	public class Graph_GUI extends JFrame implements ActionListener
 	{
+		public DGraph graph;
 		public static int width=1000;
 		public static int height=1000;
 		public static int minX=-100;
@@ -18,8 +25,78 @@ import dataStructure.*;
 		public static int minY=-100;
 		public static int maxY=100;
 		
-	    public static void printGraph(DGraph graph)
+		public Graph_GUI(DGraph gra) 
+		{
+			this.graph = gra;
+		}
+		
+		public Graph_GUI() {
+			// TODO Auto-generated constructor stub
+		}
+
+		public void init() 
+		{
+			this.setSize(5000, 50000);
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			this.setVisible(true);
+			
+			MenuBar menuBar = new MenuBar();
+			
+			Menu menu = new Menu("File");
+			menuBar.add(menu);
+			
+			Menu graphGUI = new Menu("Algorithms");
+			menuBar.add(graphGUI);
+			
+			Menu drawGraph = new Menu("Draw");
+			menuBar.add(drawGraph);
+			
+			this.setMenuBar(menuBar);
+			
+			MenuItem saveGraph = new MenuItem("Save");
+			saveGraph.addActionListener(this);
+			
+			MenuItem loadGraph = new MenuItem("load");
+			loadGraph.addActionListener(this);
+			
+			menu.add(saveGraph);
+			menu.add(loadGraph);
+    		
+			//this.addMouseListener(this);
+			MenuItem shortestPath = new MenuItem("Shortest Path");
+			shortestPath.addActionListener(this);
+			graphGUI.add(shortestPath);
+			
+			MenuItem shortestPathDist = new MenuItem("Shortest Path Dist");
+			shortestPathDist.addActionListener(this);
+			graphGUI.add(shortestPathDist);
+			
+			MenuItem tsp = new MenuItem("TSP");
+			tsp.addActionListener(this);
+			graphGUI.add(tsp);
+		} 
+		
+	    public void paint(Graphics graph)
 	    {
+	    	/**super.paint(graph);
+			
+			Point3D prev = null;
+			for (Point3D p : points) 
+			{
+				g.setColor(Color.BLUE);
+				g.fillOval((int)p.x(), (int)p.y(), 10, 10);
+				
+				if(prev != null)
+				{
+					g.setColor(Color.RED);
+					g.drawLine((int)p.x(), (int)p.y(), 
+							(int)prev.x(), (int)prev.y());
+					
+					g.drawString("5", (int)((p.x()+prev.x())/2),(int)((p.y()+prev.y())/2));
+				}
+				
+				prev = p;
+			**/		
 	        StdDraw.setCanvasSize(width,height);
 	        StdDraw.setXscale(minX,maxX);
 	        StdDraw.setYscale(minY,maxY);
@@ -68,4 +145,59 @@ import dataStructure.*;
         		
         	}
 	    }
+	    
+	    @Override
+	    public void actionPerformed (ActionEvent event) 
+	    {
+	    	String action = event.getActionCommand();
+	    	switch(action) 
+	    	{
+	    	case "Draw" : repaint();
+	    	break;
+	    	case "Save" : saveGraph();
+	    	break;
+	    	case "Load" : loadGraph();
+	    	break;
+	    	case "Shortest Path" : shortestPath();
+	    	break;
+	    	case "Shortest Path Dist" : shortestPathDist();
+	    	break;
+	    	case "TSP" : tsp();
+	    	break;
+	    	default:
+	    		break;
+	    	}
+	    }
+		private void tsp() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		private void shortestPathDist() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		private void shortestPath() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		private void loadGraph() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		private void saveGraph() {
+			// TODO Auto-generated method stub
+			
+		}
+		public static void main (String [] args) 
+		{
+			Graph_GUI graph = new Graph_GUI();
+			graph.init();
+			
+		}
 	}
+	
+	
