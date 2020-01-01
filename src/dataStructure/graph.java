@@ -37,7 +37,7 @@ public interface graph
  * @param w - positive weight representing the cost (aka time, price, etc) between src-->dest.
  * @throws Exception 
  */
-	public void connect(int src, int dest, double w) throws Exception;
+	public void connect(int src, int dest, double w) ;
 	/**
 	 * This method return a pointer (shallow copy) for the
 	 * collection representing all the nodes in the graph. 

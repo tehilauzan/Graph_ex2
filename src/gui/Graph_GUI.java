@@ -17,7 +17,7 @@ import dataStructure.*;
 
 	public class Graph_GUI extends JFrame implements ActionListener
 	{
-		public DGraph graph;
+		public DGraph currGraph;
 		public static int width=1000;
 		public static int height=1000;
 		public static int minX=-100;
@@ -27,11 +27,13 @@ import dataStructure.*;
 		
 		public Graph_GUI(DGraph gra) 
 		{
-			this.graph = gra;
+			this.currGraph = gra;
+			init();
 		}
 		
-		public Graph_GUI() {
-			// TODO Auto-generated constructor stub
+		public Graph_GUI() 
+		{
+			init();
 		}
 
 		public void init() 
@@ -78,8 +80,11 @@ import dataStructure.*;
 		
 	    public void paint(Graphics graph)
 	    {
-	    	/**super.paint(graph);
-			
+	    	super.paint(graph);
+	    	if(this.currGraph!=null)
+	    	{
+	    		
+			/**
 			Point3D prev = null;
 			for (Point3D p : points) 
 			{
@@ -100,20 +105,20 @@ import dataStructure.*;
 	        StdDraw.setCanvasSize(width,height);
 	        StdDraw.setXscale(minX,maxX);
 	        StdDraw.setYscale(minY,maxY);
-	        Iterator itOnEdge =graph.getEdgeHash().entrySet().iterator();
+	        Iterator itOnEdge =currGraph.getEdgeHash().entrySet().iterator();
         	while(itOnEdge.hasNext())
         	{
         		Map.Entry currMainEntry= (Map.Entry) itOnEdge.next();
         		int src=(int) currMainEntry.getKey();
-    			double srcX=graph.getNode(src).getLocation().x();
-	        	double srcY=graph.getNode(src).getLocation().y();
-        		for(edge_data currSpcEntry:graph.getE(src))
+    			double srcX=((dataStructure.graph) graph).getNode(src).getLocation().x();
+	        	double srcY=((dataStructure.graph) graph).getNode(src).getLocation().y();
+        		for(edge_data currSpcEntry:((dataStructure.graph) graph).getE(src))
         		{
         			int dest=(int) currSpcEntry.getDest();
         			double weight=currSpcEntry.getWeight();
 
-    	        	double destX=graph.getNode(dest).getLocation().x();
-    	        	double destY=graph.getNode(dest).getLocation().y();
+    	        	double destX=((dataStructure.graph) graph).getNode(dest).getLocation().x();
+    	        	double destY=((dataStructure.graph) graph).getNode(dest).getLocation().y();
     	        	StdDraw.setPenRadius(0.005);
     	        	
     	        	//draw the edges
@@ -144,6 +149,7 @@ import dataStructure.*;
                 StdDraw.point(srcX, srcY);
         		
         	}
+	    	}
 	    }
 	    
 	    @Override
@@ -168,27 +174,32 @@ import dataStructure.*;
 	    		break;
 	    	}
 	    }
-		private void tsp() {
+		private void tsp() 
+		{
 			// TODO Auto-generated method stub
 			
 		}
 
-		private void shortestPathDist() {
+		private void shortestPathDist() 
+		{
 			// TODO Auto-generated method stub
 			
 		}
 
-		private void shortestPath() {
+		private void shortestPath() 
+		{
 			// TODO Auto-generated method stub
 			
 		}
 
-		private void loadGraph() {
+		private void loadGraph() 
+		{
 			// TODO Auto-generated method stub
 			
 		}
 
-		private void saveGraph() {
+		private void saveGraph() 
+		{
 			// TODO Auto-generated method stub
 			
 		}

@@ -1,5 +1,6 @@
 package dataStructure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -9,12 +10,12 @@ import java.util.Map.Entry;
 
 import org.w3c.dom.Node;
 
-public class DGraph implements graph
+public class DGraph implements graph,Serializable
 {
-	Hashtable<Integer,node_data> node;
-	Hashtable<Integer , Hashtable <Integer,edge_data>> edge;
-	int mc;
-	int edgeSize;
+	public Hashtable<Integer,node_data> node;
+	public Hashtable<Integer , Hashtable <Integer,edge_data>> edge;
+	public int mc;
+	public int edgeSize;
 
 	public DGraph() 
 	{
@@ -26,7 +27,7 @@ public class DGraph implements graph
 	@Override
 	public node_data getNode(int key) 
 	{
-		if (!node.contains(key)) 
+		if(!this.node.containsKey(key))
 		{
 			return null;
 			//throw new RuntimeException("this node doesn't exist");
@@ -37,7 +38,12 @@ public class DGraph implements graph
 	@Override
 	public edge_data getEdge(int src, int dest) 
 	{
-		return edge.get(src).get(dest);
+		if(edge.get(src)!=null)
+		{
+			return edge.get(src).get(dest);
+		}
+		return null;
+		
 	}
 
 	@Override
@@ -49,7 +55,7 @@ public class DGraph implements graph
 	}
 
 	@Override
-	public void connect(int src, int dest, double w) throws Exception 
+	public void connect(int src, int dest, double w) 
 	{
 		if (getNode(src)!=null && getNode(dest)!=null) 
 		{
@@ -58,15 +64,24 @@ public class DGraph implements graph
 			{
 				Hashtable<Integer, edge_data> temp = new Hashtable<Integer,edge_data>();
 				temp.put(dest,tempEdge);
-				edge.put(src, temp);
+				this.edge.put(src, temp);
 			}
 			else 
 			{
 				if (edge.get(src).get(dest)!=null) 
 				{
-					throw new Exception ("the edge alredy exist");
+					//if the edge already exist and the same weight
+					if(edge.get(src).get(dest).getWeight()==w)
+					{
+						throw new RuntimeException ("the edge alredy exist");
+					}
+					else
+					{
+						((edgeData) this.edge.get(src).get(dest)).setWeight(w);
+					}
+					
 				}
-				edge.get(src).put(dest,tempEdge);
+				this.edge.get(src).put(dest,tempEdge);
 			}
 		mc ++; //to check
 		edgeSize++;
@@ -82,7 +97,11 @@ public class DGraph implements graph
 	@Override
 	public Collection<edge_data> getE(int node_id) 
 	{
-		return edge.get(node_id).values();
+		if(edge.get(node_id)!=null)
+		{
+			return edge.get(node_id).values();
+		}
+		return null;
 	}
 
 	@Override
@@ -91,6 +110,7 @@ public class DGraph implements graph
 		node_data removeNode = getNode(key);
 		if (removeNode!=null) 
 		{
+			mc++;
 			node.remove(key);
 			Iterator it = this.edge.entrySet().iterator();
 			//remove all edges with key as dest
@@ -156,5 +176,23 @@ public class DGraph implements graph
 	{
 		return this.edge;
 	}
+	
+
+	public void setEdgeHash(Hashtable<Integer, Hashtable<Integer, edge_data>> hashedges) 
+	{
+		this.edge = hashedges;
+		
+	}
+	public void setHashnodes(Hashtable<Integer, node_data> hashnodes) 
+	{
+		this.node = hashnodes;
+	}
+	
+	public void setEdgeSize(Hashtable<Integer, Hashtable<Integer, edge_data>> hashedges)
+	{
+		this.edgeSize=hashedges.size();
+	}
+	
+	
 
 }

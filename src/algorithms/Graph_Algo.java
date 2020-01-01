@@ -8,15 +8,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 import dataStructure.DGraph;
+import dataStructure.edgeData;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.nodeData;
 import dataStructure.node_data;
+import utils.Point3D;
 	
 /**
  * This empty class represents the set of graph-theory algorithms
@@ -24,13 +29,19 @@ import dataStructure.node_data;
  * @author 
  *
 */
-public class Graph_Algo implements graph_algorithms{
+public class Graph_Algo implements graph_algorithms
+{
 
 	private DGraph graph;
 	
 	public Graph_Algo() 
 	{
 		this.graph = new DGraph();
+	}
+	public Graph_Algo(DGraph x) //check
+	{
+		this.graph = x;
+		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public void init(graph g) 
@@ -46,6 +57,7 @@ public class Graph_Algo implements graph_algorithms{
 			FileInputStream fileInput = new FileInputStream(file_name);
 			ObjectInputStream inObject = new ObjectInputStream(fileInput);
 			DGraph initGraph = (DGraph)inObject.readObject();
+			init(initGraph);
 			inObject.close(); 
 			fileInput.close(); 
 		} 
@@ -107,10 +119,14 @@ public class Graph_Algo implements graph_algorithms{
 			return;
 		node.setTag(1);
 		nodeCounter--;
-		for(edge_data currSpcEntry:graph.getE(node.getKey()))
+		if(graph.getE(node.getKey())!=null)
 		{
-			helperIsConnected(graph.getNode(currSpcEntry.getDest()),nodeCounter);
-		}			
+			for(edge_data currSpcEntry:graph.getE(node.getKey()))
+			{
+				helperIsConnected(graph.getNode(currSpcEntry.getDest()),nodeCounter);
+			}	
+		}
+				
     }
 
 	@Override
@@ -119,7 +135,7 @@ public class Graph_Algo implements graph_algorithms{
 		vertexToInfinity();
 		//init the src to be zero weight;
 		graph.getNode(src).setWeight(0);
-		graph.getNode(src).setTag(1);
+		//graph.getNode(src).setTag(1);
 		nodeData srcTemp = (nodeData) graph.getNode(src);
 		nodeData destTemp = (nodeData) graph.getNode(dest);
 		helpShortest(srcTemp,destTemp);
@@ -155,8 +171,10 @@ public class Graph_Algo implements graph_algorithms{
 	@Override
 	public List<node_data> shortestPath(int src, int dest) 
 	{
-		if(shortestPathDist(src, dest)==Double.POSITIVE_INFINITY) 
+		if(shortestPathDist(src, dest)==Double.POSITIVE_INFINITY)
+		{
 			throw new RuntimeException("this two points aren't connected");
+		}
 		shortestPathDist(src,dest);
 		ArrayList<node_data> ans=new ArrayList<node_data>();
 		ans.add(graph.getNode(dest));
@@ -208,8 +226,10 @@ public class Graph_Algo implements graph_algorithms{
 		{
 			nodeData copy_node = new nodeData (n.getKey(),n.getWeight(),n.getTag(),n.getLocation(),n.getInfo());
 			copiedGraph.addNode(copy_node);
-		
-			for(edge_data edge: this.graph.getE(n.getKey()))
+			
+			if(this.graph.getE(n.getKey())!=null)
+			{
+				for(edge_data edge: this.graph.getE(n.getKey()))
 				{
 					try 
 						{
@@ -220,6 +240,8 @@ public class Graph_Algo implements graph_algorithms{
 							System.out.println("connect been failed, copy wasn't done");
 						}
 				}
+			}
+			
 		}
 		return copiedGraph;
 	}
@@ -255,7 +277,81 @@ public class Graph_Algo implements graph_algorithms{
 			currentNode.setTag(0);
 		}
 	}
+	
+	public graph getGraph()
+	{
+		return this.graph;
+	}
+	
+	
+	
+	
+	
+	
+	public static void main(String[] args) 
+	{
+		// TODO Auto-generated method stub
+
+		Point3D p1=new Point3D(10,15,0);
+		Point3D p2=new Point3D(50,60,0);
+		Point3D p3=new Point3D(90,40,0);
+		Point3D p4=new Point3D(20,50,0);
+		Point3D p5=new Point3D(80,10,0);
+		Point3D p6=new Point3D(5,90,0);
+
+
+		nodeData a=new nodeData(1,0,p1,0);
+		nodeData b=new nodeData(2,0,p2,0);
+		nodeData c=new nodeData(3,0,p3,0);
+
+
+
+		Hashtable<Integer, node_data> hashnodes=new Hashtable<Integer, node_data> ();
+		hashnodes.put(a.getKey(), a);
+		hashnodes.put(b.getKey(), b);
+		hashnodes.put(c.getKey(), c);
+
+
+		edgeData aa=new edgeData(a,b,40,0);
+
+		edgeData cc=new edgeData(b,c,20,0);
+		edgeData dd=new edgeData(a,c,80,0);
+
+
+		Hashtable<Integer, edge_data>hash_a=new Hashtable<Integer, edge_data>();
+		Hashtable<Integer, edge_data>hash_b=new Hashtable<Integer, edge_data>();
+		Hashtable<Integer, edge_data>hash_c=new Hashtable<Integer, edge_data>();
+
+		hash_a.put(aa.getDest(), aa);
+
+		hash_b.put(cc.getDest(), cc);
+		hash_a.put(dd.getDest(), dd);
+
+
+
+		DGraph x=new DGraph();	
+		Hashtable<Integer , Hashtable <Integer,edge_data>> hashedges=new Hashtable<Integer, Hashtable<Integer, edge_data>>();
+		hashedges.put(a.getKey(), hash_a);
+		hashedges.put(b.getKey(),hash_b);
+		hashedges.put(c.getKey(),hash_c);
+		x.setHashnodes(hashnodes);
+		x.setEdgeHash(hashedges);
 		
-}
 		
+
+
+
+
+		Graph_Algo test=new Graph_Algo(x);
+		Graph_Algo afterInit=new Graph_Algo();
+
+		test.save("saveFile.txt");
+		afterInit.init("saveFile.txt");
+
+
+
+		
+	}
+
+}		
 		
