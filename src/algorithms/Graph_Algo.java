@@ -220,10 +220,9 @@ public class Graph_Algo implements graph_algorithms
 		}
 		ArrayList <node_data> partialPath = new ArrayList<node_data>();
 		
-		int i = 0;
-		for (int target : targets) 
+		for(int i=0;i<targets.size()-1;i++)
 		{
-			partialPath = (ArrayList<node_data>) shortestPath(targets.indexOf(i),targets.indexOf(i+1));
+			partialPath = (ArrayList<node_data>) shortestPath(targets.get(i),targets.get(i+1));
 			if (i != 0) 
 			{
 				partialPath.remove(0);

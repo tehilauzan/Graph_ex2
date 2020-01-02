@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -38,26 +39,26 @@ import dataStructure.*;
 		{
 			this.currGraph = gra;
 			this.algoGraph = new Graph_Algo(gra);
-			init(gra);
+			init(this.algoGraph);
 		}
 		
 		public Graph_GUI() 
 		{
 			this.currGraph = null;
 			this.algoGraph = null;
-			init(this.currGraph);
+			init(this.algoGraph);
 		}
 
 		public Graph_GUI(graph gra) 
 		{
 			this.currGraph = new DGraph((DGraph) gra);
 			this.algoGraph = new Graph_Algo(gra);
-			init(gra);
+			init(this.algoGraph);
 		}
 
-		public void init(graph g) 
+		public void init(Graph_Algo g) 
 		{
-			this.currGraph=(DGraph) g;
+			this.algoGraph=g;
 			this.setSize(5000, 50000);
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			this.setVisible(true);
@@ -102,11 +103,12 @@ import dataStructure.*;
 			graphGUI.add(isConnected);
 		} 
 		
-	    public void paint(Graphics graph)
+	    public void paint()
 	    {
-	    	super.paint(graph);
-	    	if(this.currGraph!=null)
+	    	//super.paint(graph);
+	    	if(this.algoGraph!=null)
 	    	{
+	    		this.setVisible(true);
 	    		
 			/**
 			Point3D prev = null;
@@ -134,15 +136,15 @@ import dataStructure.*;
         	{
         		Map.Entry currMainEntry= (Map.Entry) itOnEdge.next();
         		int src=(int) currMainEntry.getKey();
-    			double srcX=((dataStructure.graph) graph).getNode(src).getLocation().x();
-	        	double srcY=((dataStructure.graph) graph).getNode(src).getLocation().y();
-        		for(edge_data currSpcEntry:((dataStructure.graph) graph).getE(src))
+    			double srcX=((dataStructure.graph) this.currGraph).getNode(src).getLocation().x();
+	        	double srcY=((dataStructure.graph) this.currGraph).getNode(src).getLocation().y();
+        		for(edge_data currSpcEntry:((dataStructure.graph) this.currGraph).getE(src))
         		{
         			int dest=(int) currSpcEntry.getDest();
         			double weight=currSpcEntry.getWeight();
 
-    	        	double destX=((dataStructure.graph) graph).getNode(dest).getLocation().x();
-    	        	double destY=((dataStructure.graph) graph).getNode(dest).getLocation().y();
+    	        	double destX=((dataStructure.graph) this.currGraph).getNode(dest).getLocation().x();
+    	        	double destY=((dataStructure.graph) this.currGraph).getNode(dest).getLocation().y();
     	        	StdDraw.setPenRadius(0.005);
     	        	
     	        	//draw the edges
@@ -316,7 +318,7 @@ import dataStructure.*;
 				algoGraph=new Graph_Algo();
 				algoGraph.init(this.currGraph);
 				ArrayList<node_data> nodeList = (ArrayList<node_data>) algoGraph.shortestPath(srcParse, destParse);
-				DGraph graphShortest = new DGraph();
+				Graph_Algo graphShortest = new Graph_Algo();
 
 				Iterator iter = nodeList.iterator();
 				int index=0;
@@ -324,8 +326,8 @@ import dataStructure.*;
 				while (iter.hasNext()) 
 				{
 					node_data firstNode = (node_data) iter.next();
-					graphShortest.addNode(firstNode);
-					graphShortest.connect(nodeList.get(index).getKey(), nodeList.get(index+1).getKey(), this.currGraph.getEdge(nodeList.get(index).getKey(), nodeList.get(index+1).getKey()).getWeight());
+					graphShortest.getGraph().addNode(firstNode);
+					graphShortest.getGraph().connect(nodeList.get(index).getKey(), nodeList.get(index+1).getKey(), this.currGraph.getEdge(nodeList.get(index).getKey(), nodeList.get(index+1).getKey()).getWeight());
 					index++;
 					path.append(nodeList.get(index).getKey());
 					if(index!=nodeList.size()-1)
@@ -357,7 +359,7 @@ import dataStructure.*;
 			if(selection==JFileChooser.APPROVE_OPTION) 
 			{
 				algoGraph.init(folder.getSelectedFile().getAbsolutePath());
-				graph gr_new=algoGraph.copy();
+				Graph_Algo gr_new=(Graph_Algo)algoGraph.copy();
 				init(gr_new);
 			}
 		}
@@ -382,7 +384,7 @@ import dataStructure.*;
 				/*	graphFactory r = new graphFactory();
 					graph t = r.randomGraphSmallConnected();*/
 					//boker tov eldar.
-					
+					/**
 					Point3D p1 = new Point3D(306, 287);
 					Point3D p2 = new Point3D(203, 96);
 					Point3D p3 = new Point3D(154, 152);
@@ -420,12 +422,71 @@ import dataStructure.*;
 					g.connect(n6.getKey(), n2.getKey(), 4.20);
 
 					Graph_GUI a = new Graph_GUI(g);
-					a.setVisible(true);
+					a.setVisible(true);*/
+			
+			
+			
+	        Point3D x = new Point3D(-400,300,0);
+	        Point3D x2 = new Point3D(300,150,0);
+	        Point3D x3 = new Point3D(380,-300,0);
+	        Point3D x4 = new Point3D(150,-400,0);
+	        Point3D x5 = new Point3D(0,-450,0);
+	        Point3D x6 = new Point3D(200,-300,0);
+	        Point3D x7 = new Point3D(-400,-150,0);
+	        Point3D x8 = new Point3D(-400,120,0);
+	        nodeData a1 = new nodeData(1,0,x,0);
+	        nodeData a2 = new nodeData(2,0,x2,0);
+	        nodeData a3 = new nodeData(3,0,x3,0);
+	        nodeData a4 = new nodeData(4,0,x4,0);
+	        nodeData a5 = new nodeData(5,0,x5,0);
+	        nodeData a6 = new nodeData(6,0,x6,0);
+	        nodeData a7 = new nodeData(7,0,x7,0);
+	        nodeData a8 = new nodeData(8,0,x8,0);
+	        DGraph d = new DGraph();
+	        d.addNode(a1);
+	        d.addNode(a2);
+	        d.addNode(a3);
+	        d.addNode(a4);
+	        d.addNode(a5);
+	        d.addNode(a6);
+	        d.addNode(a7);
+	        d.addNode(a8);
+	        d.connect(1,2,5);
+	        d.connect(1,5,2);
+	        d.connect(1,3,6);
+	        d.connect(1,6,5);
+	        d.connect(3,4,7);
+	        d.connect(2,8,8);
+	        d.connect(2,7,3);
+	        d.connect(5,1,5);
+	        d.connect(5,6,2);
+	        d.connect(6,1,3);
+	        d.connect(6,5,3);
+	        d.connect(6,7,3);
+	        d.connect(7,6,3);
+	        Graph_Algo p = new Graph_Algo();
+	        p.init(d);
+	        List<Integer> r = new LinkedList<>();
+	        r.add(1);
+	        r.add(6);
+	        r.add(5);
+	        List<node_data> ans = p.TSP(r);
+	        Graph_GUI q = new Graph_GUI();
+	        q.init(p);
+	        q.paint();
+	        double bbbb = p.shortestPathDist(3,4);
+	    //    List<node_data> theList = p.TSP(r);
+	        double eeeee = p.shortestPathDist(1,6);
+	   //     List<node_data> qqqq =  p.TSP(r);
+	        System.out.println(p.isConnected());
+	        //System.out.println("r");
+
+	    }
 				}
 			
 			
 			
-		}
+		
 	
 	
 	
