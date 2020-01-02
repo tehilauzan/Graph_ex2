@@ -58,8 +58,8 @@ class Ex2Test {
 		return ans;
 	}
 	boolean drawGraph(graph g) { 
-		//Graphics grp = new Graphics();
-		//paint(grp); 
+		Graph_GUI grap = new Graph_GUI(g);
+		grap.setVisible(true);
 		return true;
 		
 	}
