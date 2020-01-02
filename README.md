@@ -22,6 +22,8 @@ the project divide to four package:
     * isConnected()
     * helperIsConnected()
     * shortestPathDist()
+    * helpShortest (node_data src, node_data dest)
+    * 
      
 
 ## 2. dataStructure contains:
