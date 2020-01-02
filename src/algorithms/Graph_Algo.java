@@ -179,7 +179,8 @@ public class Graph_Algo implements graph_algorithms
 	{
 		if(shortestPathDist(src, dest)==Double.POSITIVE_INFINITY)
 		{
-			throw new RuntimeException("this two points aren't connected");
+			return null;
+			//throw new RuntimeException("this two points aren't connected");
 		}
 		shortestPathDist(src,dest);
 		ArrayList<node_data> ans=new ArrayList<node_data>();
@@ -223,15 +224,18 @@ public class Graph_Algo implements graph_algorithms
 		for(int i=0;i<targets.size()-1;i++)
 		{
 			partialPath = (ArrayList<node_data>) shortestPath(targets.get(i),targets.get(i+1));
-			if (i != 0) 
+			if (partialPath!=null) 
 			{
-				partialPath.remove(0);
+				if (i != 0) 
+				{
+					partialPath.remove(0);
+				}
+				for (node_data currNode : partialPath) 
+				{
+					ans.add(currNode);
+				}
+				partialPath.clear();	
 			}
-			for (node_data currNode : partialPath) 
-			{
-				ans.add(currNode);
-			}
-			partialPath.clear();
 		}
 		return ans;
 	}
@@ -266,6 +270,10 @@ public class Graph_Algo implements graph_algorithms
 	
 	public boolean chackIfTargetsExist(List<Integer> targets) 
 	{
+		if (this.graph.getV().isEmpty()) 
+		{
+			return false;
+		}
 		for (int target: targets) 
 		{
 			if (this.graph.getNode(target)==null)

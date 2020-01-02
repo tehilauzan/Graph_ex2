@@ -81,11 +81,14 @@ import dataStructure.*;
 			MenuItem isConnected = new MenuItem("Is The Graph Connected");
 			isConnected.addActionListener(this);
 			graphGUI.add(isConnected);
+			
+			this.addMouseListener(this);
 		} 
 		
 	  
 		public void paint(Graphics graph) {
 			super.paint(graph);
+			graph.setFont(new Font ("Courier", Font.PLAIN,20));
 			if (currGraph == null) {
 				JFrame mesg = new JFrame(); 
 				JOptionPane.showMessageDialog(mesg, "There Isn't Graph To Show");
@@ -128,8 +131,6 @@ import dataStructure.*;
 	    	break;
 	    	case "Save" : saveGraph();
 	    	break;
-	    	case "Load" : loadGraph();
-	    	break;
 	    	case "Shortest Path" : shortestPath();
 	    	break;
 	    	case "Shortest Path Dist" : shortestPathDist();
@@ -138,7 +139,8 @@ import dataStructure.*;
 	    	break;
 	    	case "Is the graph connected Connected" : isConnected();
 	    	break;
-	    	default:
+	    	default: //defult set to be load
+	    		loadGraph();
 	    		break;
 	    	}
 	    }
@@ -349,6 +351,12 @@ import dataStructure.*;
 		public void mouseReleased(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 
+		}
+		public static void main (String [] args) 
+		{
+			graph gr = new DGraph();
+			//repaint();
+			
 		}
 				
 	}
