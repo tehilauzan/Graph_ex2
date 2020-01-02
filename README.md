@@ -5,7 +5,7 @@ this project represent data structure for directed graph. including data structu
 the project divide to four package:
 
 ## 1. algorithms package contains:
-    graph_algorithms (interface): represents the "regular" Graph Theory algorithms including:
+### graph_algorithms (interface): represents the "regular" Graph Theory algorithms including:
 
  * clone()
  * init(String file_name);
@@ -14,7 +14,15 @@ the project divide to four package:
  * double shortestPathDist(int src, int dest);
  * List<Node> shortestPath(int src, int dest);
 
-     Graph_Algo: represents the set of graph-theory algorithms that implement the interface, including: 
+### Graph_Algo: represents the set of graph-theory algorithms that implement the interface, including the following mathods:
+    
+    * init(graph g)
+    * init(String file_name)
+    * save(String file_name)
+    * isConnected()
+    * helperIsConnected()
+    * shortestPathDist()
+     
 
 ## 2. dataStructure contains:
   ### DGraph:
