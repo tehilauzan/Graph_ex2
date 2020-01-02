@@ -6,18 +6,22 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
+import algorithms.Graph_Algo;
 import dataStructure.*;
 
 	public class Graph_GUI extends JFrame implements ActionListener
 	{
 		public DGraph currGraph;
+		private Graph_Algo algoGraph;
 		public static int width=1000;
 		public static int height=1000;
 		public static int minX=-100;
@@ -28,6 +32,7 @@ import dataStructure.*;
 		public Graph_GUI(DGraph gra) 
 		{
 			this.currGraph = gra;
+			this.algoGraph = new Graph_Algo(gra);
 			init();
 		}
 		
@@ -76,6 +81,10 @@ import dataStructure.*;
 			MenuItem tsp = new MenuItem("TSP");
 			tsp.addActionListener(this);
 			graphGUI.add(tsp);
+			
+			MenuItem isConnected = new MenuItem("Is the graph connected Connected");
+			isConnected.addActionListener(this);
+			graphGUI.add(isConnected);
 		} 
 		
 	    public void paint(Graphics graph)
@@ -170,10 +179,27 @@ import dataStructure.*;
 	    	break;
 	    	case "TSP" : tsp();
 	    	break;
+	    	case "Is the graph connected Connected" : isConnected();
+	    	break;
 	    	default:
 	    		break;
 	    	}
 	    }
+		private void isConnected() {
+			/**
+			if(algoGraph.getGraph()==null) System.out.println("doesnt have a graph");
+			else
+				System.out.println("Is the graph connect ? "+algoGraph.isConnected());
+			boolean checkIfConnected = algoGraph.isConnected();
+			JFrame winCheckConnectd = new JFrame("Check if graph connected");
+			winCheckConnectd.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			Font font = new Font("Jokerman", Font.PLAIN, 35);
+			JLabel textLabel = new JLabel("This graph is "+checkIfConnected);
+			textLabel.setFont(font);
+			//winCheckConnectd.add(name, comp)("This graph is "+checkIfConnected);
+			*/
+		}
+
 		private void tsp() 
 		{
 			// TODO Auto-generated method stub
@@ -182,14 +208,23 @@ import dataStructure.*;
 
 		private void shortestPathDist() 
 		{
-			// TODO Auto-generated method stub
+			
 			
 		}
 
 		private void shortestPath() 
 		{
-			// TODO Auto-generated method stub
-			
+			int src = 2;
+			int dest = 3;
+			ArrayList<node_data> nodeList = (ArrayList<node_data>) algoGraph.shortestPath(src, dest);
+			DGraph graphShortest = new DGraph();			
+			Iterator iter = nodeList.iterator();
+			while (iter.hasNext()) 
+			{
+				node_data firstNode = (node_data) iter.next();
+				graphShortest.addNode(firstNode);
+			}
+			//paint(graphShortest);
 		}
 
 		private void loadGraph() 
