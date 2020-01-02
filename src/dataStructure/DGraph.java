@@ -24,6 +24,15 @@ public class DGraph implements graph,Serializable
 		mc=0;
 		edgeSize=0;
 	}
+	
+	public DGraph(graph graph) 
+	{
+		node=((DGraph)graph).getNodeHash();
+		edge=((DGraph)graph).getNodeHash();
+		mc=((DGraph)graph).getMC();
+		edgeSize=((DGraph)graph).edgeSize();
+	}
+	
 	@Override
 	public node_data getNode(int key) 
 	{

@@ -41,7 +41,10 @@ public class Graph_Algo implements graph_algorithms
 	public Graph_Algo(DGraph x) //check
 	{
 		this.graph = x;
-		// TODO Auto-generated constructor stub
+	}
+	public Graph_Algo(graph _graph) 
+	{
+		this.graph = (DGraph) _graph;
 	}
 	@Override
 	public void init(graph g) 
@@ -97,6 +100,8 @@ public class Graph_Algo implements graph_algorithms
 	public boolean isConnected() 
 	{
 			setTags();
+			if(!graph.getV().isEmpty())
+			{
 			node_data randomNode = (node_data)graph.getV().toArray()[0];
 			helperIsConnected(randomNode,this.graph.nodeSize());
 			for (node_data n: this.graph.getV()) 
@@ -105,6 +110,7 @@ public class Graph_Algo implements graph_algorithms
 				{
 					return false;
 				}
+			}
 			}
 			return true;
 	}
@@ -184,8 +190,19 @@ public class Graph_Algo implements graph_algorithms
 			ans.add((node_data) this.graph.getNodeHash().get(Integer.valueOf(curreNode.getInfo())));
 			curreNode = (node_data) this.graph.getNodeHash().get(Integer.valueOf(curreNode.getInfo()));
 		}
-		
+		ans=reverse(ans);
 		return ans;
+	}
+	
+	public ArrayList<node_data> reverse(ArrayList<node_data> array)
+	{
+		ArrayList<node_data> copy=new ArrayList<node_data>();
+		for(int i=array.size()-1;i>=0;i--)
+		{
+			copy.add(array.get(i));
+		}
+		return copy;
+
 	}
 
 	@Override
