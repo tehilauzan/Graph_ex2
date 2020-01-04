@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,26 +16,65 @@ import javax.swing.filechooser.FileSystemView;
 import algorithms.Graph_Algo;
 import dataStructure.*;
 
-	public class Graph_GUI extends JFrame implements ActionListener , MouseListener
+	public class Graph_GUI extends JFrame implements ActionListener , MouseListener, Runnable
 	{
 		public graph currGraph;
+		private int mcUpdate;
 		
 		public Graph_GUI(DGraph gra) 
 		{
-			this.currGraph = gra;
+			this.currGraph = new DGraph(gra);
+			this.mcUpdate=0;
+			Thread graphUpdate = new Thread(this);
+			//start will call the run method
+			graphUpdate.start();
 			init(gra);
 		}
 		
 		public Graph_GUI() 
 		{
 			this.currGraph = null;
+			this.mcUpdate=0;
+			Thread graphUpdate = new Thread(this);
+			//start will call the run method
+			graphUpdate.start();
 			init(this.currGraph);
 		}
 
 		public Graph_GUI(graph gra) 
 		{
 			this.currGraph = new DGraph((DGraph) gra);
+			this.mcUpdate=0;
+			Thread graphUpdate = new Thread(this);
+			//start will call the run method
+			graphUpdate.start();
 			init(this.currGraph);
+		}
+		
+		
+		@Override
+		public void run() 
+		{
+			while(true) 
+			{
+				synchronized(this) 
+				{
+					if(this.mcUpdate != this.currGraph.getMC()) 
+					{
+						this.mcUpdate = this.currGraph.getMC();
+						init(this.currGraph);
+					}
+				}
+				
+				try 
+				{
+					Thread.sleep(3000);
+				} 
+				catch (InterruptedException e)
+				{
+					System.out.println("Error accure in thread handeling");
+				}
+			}
 		}
 
 		public void init(graph g) 
@@ -86,7 +126,8 @@ import dataStructure.*;
 		} 
 		
 	  
-		public void paint(Graphics graph) {
+		public void paint(Graphics graph) 
+		{
 			super.paint(graph);
 			graph.setFont(new Font ("Courier", Font.PLAIN,20));
 			if (currGraph == null) {
@@ -137,14 +178,14 @@ import dataStructure.*;
 	    	break;
 	    	case "TSP" : tsp();
 	    	break;
-	    	case "Is the graph connected Connected" : isConnected();
+	    	case "Is The Graph Connected" : isConnected();
 	    	break;
 	    	default: //defult set to be load
 	    		loadGraph();
 	    		break;
 	    	}
 	    }
-		private void isConnected() 
+	    public void isConnected() 
 		{
 			Graph_Algo tempAlgo = new Graph_Algo();
 			JFrame window = new JFrame();
@@ -159,7 +200,7 @@ import dataStructure.*;
 			}
 		}
 
-		private void tsp() 
+	    public void tsp() 
 		{
 			Graph_Algo algo = new Graph_Algo();
 			algo.init(this.currGraph);
@@ -183,10 +224,19 @@ import dataStructure.*;
 				}
 				while(!keys.isEmpty())
 				{
-					listInt.add(Integer.parseInt(keys.substring(0, keys.indexOf(" "))));
-					keys=keys.substring(keys.indexOf(" ")+1, keys.length()-1);
+					if(keys.length()==1 && keys.matches("\\d"))
+					{
+						listInt.add(Integer.parseInt(keys));
+						keys=keys.replaceFirst("\\d", "");
+					}
+					else if (keys.length()>1)
+					{
+						listInt.add(Integer.parseInt(keys.substring(0, keys.indexOf(" "))));
+						keys=keys.substring(keys.indexOf(" ")+1, keys.length());
+					}
 				}
-				algo.TSP(listInt);
+				ArrayList<node_data> nodeList =(ArrayList<node_data>) algo.TSP(listInt);
+				printPath(nodeList);
 			}
 			
 			catch(Exception e)
@@ -195,7 +245,7 @@ import dataStructure.*;
 			}
 		}
 
-		private void shortestPathDist() 
+	    public void shortestPathDist() 
 		{
 			Graph_Algo algo = new Graph_Algo();
 			algo.init(this.currGraph);
@@ -234,7 +284,7 @@ import dataStructure.*;
 			
 		}
 
-		private void shortestPath() 
+	    public void shortestPath() 
 		{
 			Graph_Algo algo = new Graph_Algo();
 			algo.init(this.currGraph);
@@ -265,29 +315,7 @@ import dataStructure.*;
 				algo=new Graph_Algo();
 				algo.init(this.currGraph);
 				ArrayList<node_data> nodeList = (ArrayList<node_data>) algo.shortestPath(srcParse, destParse);
-				DGraph graphShortest = new DGraph();
-				Iterator iter = nodeList.iterator();
-				int index=0;
-				StringBuilder path=new StringBuilder();
-				while (iter.hasNext()) 
-				{
-					node_data firstNode = (node_data) iter.next();
-					graphShortest.addNode(firstNode);
-					graphShortest.connect(nodeList.get(index).getKey(), nodeList.get(index+1).getKey(), this.currGraph.getEdge(nodeList.get(index).getKey(), nodeList.get(index+1).getKey()).getWeight());
-					index++;
-					path.append(nodeList.get(index).getKey());
-					if(index!=nodeList.size()-1)
-					{
-						path.append("---->");
-					}
-					
-					else
-					{
-						path.append(";");
-					}
-				}
-				init(graphShortest);
-				JOptionPane.showMessageDialog(null, path);
+				printPath(nodeList);
 			}
 			catch(Exception e)
 			{
@@ -295,8 +323,38 @@ import dataStructure.*;
 			}
 
 		}
+	    
+	    private void printPath(ArrayList<node_data> nodeList)
+	    {
+	    	DGraph graphShortest = new DGraph();
+			Iterator iter = nodeList.iterator();
+			int index=0;
+			StringBuilder path=new StringBuilder();
+			while (iter.hasNext()) 
+			{
+				node_data firstNode = (node_data) iter.next();
+				graphShortest.addNode(firstNode);
+				if(index!=0)
+				{
+					graphShortest.connect(nodeList.get(index-1).getKey(), nodeList.get(index).getKey(), this.currGraph.getEdge(nodeList.get(index-1).getKey(), nodeList.get(index).getKey()).getWeight());
+				}
+				path.append(nodeList.get(index).getKey());
+				index++;
+				if(index!=nodeList.size())
+				{
+					path.append("---->");
+				}
+				
+				else
+				{
+					path.append(";");
+				}
+			}
+			init(graphShortest);
+			JOptionPane.showMessageDialog(null, path);
+	    }
 
-		private void loadGraph() 
+	    public void loadGraph() 
 		{
 			Graph_Algo algo = new Graph_Algo();
 			JFileChooser folder=new JFileChooser(FileSystemView.getFileSystemView());
@@ -305,12 +363,12 @@ import dataStructure.*;
 			if(selection==JFileChooser.APPROVE_OPTION) 
 			{
 				algo.init(folder.getSelectedFile().getAbsolutePath());
-				//Graph_Algo gr_new=(Graph_Algo)algo.copy();
-				//algo.init(currGraph);
+				this.currGraph=algo.copy();
+				repaint();
 			}
 		}
 
-		private void saveGraph() 
+	    public void saveGraph() 
 		{
 			Graph_Algo algo = new Graph_Algo();
 			algo.init(this.currGraph);
@@ -324,39 +382,39 @@ import dataStructure.*;
 			}
 		}
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-		public static void main (String [] args) 
+		public void mouseClicked(MouseEvent arg0) 
 		{
-			graph gr = new DGraph();
-			//repaint();
-			
+			// TODO Auto-generated method stub
+
 		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) 
+		{
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) 
+		{
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) 
+		{
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) 
+		{
+			// TODO Auto-generated method stub
+
+		}
+
 				
 	}
