@@ -24,7 +24,7 @@ import dataStructure.*;
 		public Graph_GUI(DGraph gra) 
 		{
 			this.currGraph = new DGraph(gra);
-			this.mcUpdate=0;
+			this.mcUpdate=this.currGraph.getMC();
 			Thread graphUpdate = new Thread(this);
 			//start will call the run method
 			graphUpdate.start();
@@ -43,12 +43,16 @@ import dataStructure.*;
 
 		public Graph_GUI(graph gra) 
 		{
-			this.currGraph = new DGraph((DGraph) gra);
-			this.mcUpdate=0;
-			Thread graphUpdate = new Thread(this);
-			//start will call the run method
-			graphUpdate.start();
-			init(this.currGraph);
+			if(gra!=null)
+			{
+				this.currGraph = new DGraph((DGraph) gra);
+				this.mcUpdate=this.currGraph.getMC();
+				Thread graphUpdate = new Thread(this);
+				//start will call the run method
+				graphUpdate.start();
+				init(this.currGraph);
+			}
+			
 		}
 		
 		
@@ -59,7 +63,7 @@ import dataStructure.*;
 			{
 				synchronized(this) 
 				{
-					if(this.mcUpdate != this.currGraph.getMC()) 
+					if(this.currGraph!=null && this.mcUpdate != this.currGraph.getMC()) 
 					{
 						this.mcUpdate = this.currGraph.getMC();
 						init(this.currGraph);
@@ -130,7 +134,8 @@ import dataStructure.*;
 		{
 			super.paint(graph);
 			graph.setFont(new Font ("Courier", Font.PLAIN,20));
-			if (currGraph == null) {
+			if (currGraph == null) 
+			{
 				JFrame mesg = new JFrame(); 
 				JOptionPane.showMessageDialog(mesg, "There Isn't Graph To Show");
 			}
@@ -415,6 +420,6 @@ import dataStructure.*;
 			// TODO Auto-generated method stub
 
 		}
-
+		
 				
 	}
