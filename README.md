@@ -1,38 +1,7 @@
 # Graphs
 
-this project represent data structure for directed graph. including data structure how fit to graphs, numbers of algorithms on graphs and also provides GUI to user to see the graphs.
-
-the project divide to four package:
-
-## 1. algorithms package contains:
-### graph_algorithms (interface): represents the "regular" Graph Theory algorithms including:
-
- * clone()
- * init(String file_name);
- * save(String file_name);
- * isConnected();
- * double shortestPathDist(int src, int dest);
- * List<Node> shortestPath(int src, int dest);
-
-### Graph_Algo: represents the set of graph-theory algorithms that implement the interface, including the following mathods:
-    
-    * init(graph g)
-    * init(String file_name)
-    * save(String file_name)
-    * isConnected()
-    * helperIsConnected()
-    * shortestPathDist()
-    * helpShortest (node_data src, node_data dest)
-    * 
-     
-
-## 2. dataStructure contains:
-  ### DGraph:
-  ### edge_data:
-  ### edgeData:
-  ### node_data:
-  ### nodeData:
-  ### graph:
-## 3. gui contains:
-  ### Graph_GUI:
-## 4.utils.
+* this project represent data structure for directed graph. including data structure how fit to graphs, numbers of algorithms on graphs
+(EX. algo that calculate the shortset way from one node to another and more) and also provides GUI to user to see the graphs.
+* we choose to use Data structure Hash Table to the graph.
+* our project consisit from 5 packeges and al lot of class and functions. to extend on each functions you can visit in the wiki page of out project.
+* auters @DZand And tehilauzan
