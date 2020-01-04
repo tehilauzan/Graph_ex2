@@ -39,7 +39,6 @@ public class DGraph implements graph,Serializable
 		if(!this.node.containsKey(key))
 		{
 			return null;
-			//throw new RuntimeException("this node doesn't exist");
 		}
 		return node.get(key);
 	}
@@ -92,7 +91,7 @@ public class DGraph implements graph,Serializable
 				}
 				this.edge.get(src).put(dest,tempEdge);
 			}
-		mc ++; //to check
+		mc ++; 
 		edgeSize++;
 		}
 	}

@@ -21,6 +21,7 @@ import dataStructure.*;
 		public graph currGraph;
 		private int mcUpdate;
 		
+		
 		public Graph_GUI(DGraph gra) 
 		{
 			this.currGraph = new DGraph(gra);
@@ -96,9 +97,6 @@ import dataStructure.*;
 			Menu graphGUI = new Menu("Algorithms");
 			menuBar.add(graphGUI);
 			
-			Menu drawGraph = new Menu("Draw");
-			menuBar.add(drawGraph);
-			
 			this.setMenuBar(menuBar);
 			
 			MenuItem saveGraph = new MenuItem("Save");
@@ -173,8 +171,6 @@ import dataStructure.*;
 	    	String action = event.getActionCommand();
 	    	switch(action) 
 	    	{
-	    	case "Draw" : repaint();
-	    	break;
 	    	case "Save" : saveGraph();
 	    	break;
 	    	case "Shortest Path" : shortestPath();
@@ -185,12 +181,13 @@ import dataStructure.*;
 	    	break;
 	    	case "Is The Graph Connected" : isConnected();
 	    	break;
-	    	default: //defult set to be load
+	    	default: //Default set to be load
 	    		loadGraph();
 	    		break;
 	    	}
 	    }
-	    public void isConnected() 
+
+		public void isConnected() 
 		{
 			Graph_Algo tempAlgo = new Graph_Algo();
 			JFrame window = new JFrame();
@@ -219,6 +216,7 @@ import dataStructure.*;
 				if(numNodeParse>this.currGraph.getV().size())
 				{
 					JOptionPane.showMessageDialog(input, "Number of nodes is larger than the exisitng ammount .");
+					return;
 				}
 
 				LinkedList<Integer> listInt= new LinkedList<Integer>();
@@ -420,6 +418,5 @@ import dataStructure.*;
 			// TODO Auto-generated method stub
 
 		}
-		
 				
 	}
