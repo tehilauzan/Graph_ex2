@@ -154,5 +154,6 @@ result- The time for getting all the model results: 0.27 sec
 
   1. while we divide the set into two classes: 66% for training and 33% for testing. we saw we have a balancing problem. 
     so we devided the data so that will be enough patients with recurrent in the training set but also to have some in the testing
+  2. in this algorithm we were helped in this site: https://dzone.com/articles/adaline-explained-with-python-example-data-analyti
   
 
