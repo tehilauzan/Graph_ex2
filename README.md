@@ -2,6 +2,65 @@
 
 1. # perceptron algorithm
 
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+def load_data():
+    data = pd.read_csv('wpbc.data', names=range(1, 36), index_col=False, na_values="?")
+    data[2].replace({'N': -1, 'R': 1}, inplace=True)
+    # delete columns 1 +3
+    data = data.drop([1, 3], axis=1)
+
+    # make the dataset linearly separable
+    data = data[:100]
+    data[4] = np.where(data.iloc[:, -1] == 'Iris-setosa', 0, 1)
+    data = np.asmatrix(data, dtype='float64')
+    return data
+
+
+data = load_data()
+
+
+def perceptron(data, num_iter):
+    features = data[:, :-1]
+    labels = data[:, -1]
+
+    # set weights to zero
+    w = np.zeros(shape=(1, features.shape[1] + 1))
+
+    misclassified_ = []
+
+    for epoch in range(num_iter):
+        misclassified = 0
+        for x, label in zip(features, labels):
+            x = np.insert(x, 0, 1)
+            y = np.dot(w, x.transpose())
+            target = 1.0 if (y > 0) else 0.0
+
+            delta = (label.item(0, 0) - target)
+
+            if (delta):  # misclassified
+                misclassified += 1
+                w += (delta * x)
+
+        misclassified_.append(misclassified)
+    return (w, misclassified_)
+
+
+num_iter = 10
+w, misclassified_ = perceptron(data, num_iter)
+
+
+epochs = np.arange(1, num_iter+1)
+plt.plot(epochs, misclassified_)
+plt.xlabel('iterations')
+plt.ylabel('misclassified')
+plt.show()
+```
+![Alt text](c:/tes.jpg?raw=true "Title")
 2. ## Adaline algorithm 
 
 ```python
@@ -96,7 +155,7 @@ class Adaline(object):
 looking for the best paremtars
 
 ```python
-first_range = range(1, 51)
+first_range = range(1, 41)
 secend_range = [0.01,0.005,0.001,0.0005,0.0001]
 first_scores = []
 
@@ -140,9 +199,9 @@ print("Accuracy of Adaline algorithm with cross-validation: %.2f percents"  % (c
 print("Standart Deviation of Adaline algorithm with cross-validation %.3f precents" % (cross_val_score(adaline_algo, X, y, cv=3, scoring='accuracy').std()*100))
 ```
 result- 
-Accuracy of Adaline algorithm with split: 71.21 percents
-Accuracy of Adaline algorithm with cross-validation: 76.26 percents
-Standart Deviation of Adaline algorithm with cross-validation 2.575 precents
+1.Accuracy of Adaline algorithm with split: 71.21 percents
+2.Accuracy of Adaline algorithm with cross-validation: 76.26 percents
+3.Standart Deviation of Adaline algorithm with cross-validation 2.575 precents
 
 ## The time that took to get all the model results:
 ```python
