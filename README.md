@@ -195,7 +195,8 @@ y_predict = adaline_algo.predict(X_test)
 print("Accuracy of Adaline algorithm with split: %.2f percents" % (metrics.accuracy_score(y_test, y_predict)*100))
 cv=cross_val_score(adaline_algo, X, y, cv=3, scoring='accuracy').mean()
 print("Accuracy of Adaline algorithm with cross-validation: %.2f percents"  % (cv*100))
-print("Standart Deviation of Adaline algorithm with cross-validation %.3f precents" % (cross_val_score(adaline_algo, X, y, cv=3, scoring='accuracy').std()*100))
+print("Standart Deviation of Adaline algorithm with cross-validation %.3f precents" % 
+(cross_val_score(adaline_algo, X, y, cv=3, scoring='accuracy').std()*100))
 ```
 result- 
 1.Accuracy of Adaline algorithm with split: 71.21 percents
