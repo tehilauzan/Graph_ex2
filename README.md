@@ -60,7 +60,6 @@ plt.xlabel('iterations')
 plt.ylabel('misclassified')
 plt.show()
 ```
-![Alt text](c:/tes.jpg?raw=true "Title")
 2. ## Adaline algorithm 
 
 ```python
