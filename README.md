@@ -36,20 +36,9 @@ freqs = pandas.DataFrame({"Training dataset": [(y_train == 1).sum(),(y_train == 
                      index=["Recurrent", "Nonrecurrent"])
 freqs[["Training dataset", "Test dataset", "Total"]]
 ```
-Adaline  Parameters:
-    ------------
-    learning_rate : The learning rate (between 0 and 1)
-    num_iterations : Passes over the training dataset.
     
 ```python
 class Adaline(object):
-
-    Parameters:
-    ------------
-    learning_rate : The learning rate (between 0 and 1)
-    num_iterations : Passes over the training dataset.
-    """
-
     def __init__(self, learning_rate=0.01, num_iterations=10, random_state=None):
         self.num_iterations = num_iterations
         self.learning_rate = learning_rate
@@ -61,14 +50,6 @@ class Adaline(object):
         return {"learning_rate": self.learning_rate, "num_iterations": self.num_iterations}
 
     def fit(self, X, y):
-        """ Fit training data.
-
-        Parameters
-        ----------
-        X : shape = [n_samples, n_features]. Training data, where n_samples is the number of samples and
-            n_features is the number of features.
-        y : shape = [n_samples]. Target values.
-        """
         self.init_weights(X.shape[1])
         self.cost_ = []
         for i in range(self.num_iterations):
@@ -80,7 +61,6 @@ class Adaline(object):
         return self
 
     def partial_fit(self, X, y):
-        """Fit training data without reinitializing the weights"""
         if not self.w_initialized:
             self.init_weights(X.shape[1])
         if y.ravel().shape[0] > 1:
@@ -91,12 +71,10 @@ class Adaline(object):
         return self
 
     def init_weights(self, m):
-        """Initialize weights to zeros"""
         self.w_ = numpy.zeros(1 + m)
         self.w_initialized = True
 
     def update_weights(self, xi, target):
-        """Apply Adaline learning rule to update the weights"""
         output = self.net_input(xi)
         error = target - output
         self.w_[1:] += self.learning_rate * xi.dot(error)
@@ -105,7 +83,6 @@ class Adaline(object):
         return cost
 
     def net_input(self, X):
-        """Calculate net input"""
         weighted_sum = numpy.dot(X, self.w_[1:]) + self.w_[0]
         return weighted_sum
 
@@ -113,56 +90,68 @@ class Adaline(object):
         return X
 
     def predict(self, X):
-        """Return class label after unit step"""
         return numpy.where(self.activation_function(self.net_input(X)) >= 0.0, 1, -1)
+```
 
+looking for the best paremtars
 
+```python
+first_range = range(1, 51)
+secend_range = [0.01,0.005,0.001,0.0005,0.0001]
+first_scores = []
 
-i_range = range(1, 51)
-j_range = [0.01,0.005,0.001,0.0005,0.0001]
-i_scores = []
-
-zdata = []
 xdata = []
 ydata = []
+zdata = []
 
-for i in i_range:
-    for j in j_range:
+for i in first_range:
+    for j in secend_range:
         adaline_algo = Adaline(num_iterations=i, learning_rate=j, random_state=1)
         adaline_algo.fit(X_train, y_train)
         y_predict = adaline_algo.predict(X_test)
-        scores = metrics.accuracy_score(y_test, y_predict)
-        i_scores.append(scores)
-        zdata.append(scores)
+        first_scores.append(metrics.accuracy_score(y_test, y_predict))
         xdata.append(i)
         ydata.append(j)
-
-fig = pyplot.figure(figsize=(10,10))
-ax = pyplot.axes(projection='3d')
-ax.plot_trisurf(xdata, ydata, zdata, cmap='viridis');
-
-start_time = time.time()
-ada = Adaline(num_iterations=8, learning_rate=0.001, random_state=1)
-
-ada.fit(X_train, y_train)
-print("The time for model fitting is: %.2f sec" % (time.time() - start_time))
-
-y_predict = ada.predict(X_train)
-print("Accuracy of Adaline (train): %.2f percents" % (metrics.accuracy_score(y_train, y_predict)*100))
-
-y_predict = ada.predict(X_test)
-print("Accuracy of Adaline (split): %.2f percents" % (metrics.accuracy_score(y_test, y_predict)*100))
-cv=cross_val_score(ada, X, y, cv=3, scoring='accuracy').mean()
-print("Accuracy of Adaline (cross-validation): %.2f percents"  % (cv*100))
-
-
-print("Standart Deviation of Adaline (cross-validation) %.2f precents" % (cross_val_score(ada, X, y, cv=3, scoring='accuracy').std()*100))
-
-
-adaTime= time.time() - start_time
-print("The time for getting all the model results: %.2f sec" % (adaTime))
+        zdata.append(metrics.accuracy_score(y_test, y_predict))
 
 ```
+## The time for training the model using Adaline
+```python
+start_time = time.time()
+adaline_algo = Adaline(num_iterations=8, learning_rate=0.001, random_state=1)
+
+adaline_algo.fit(X_train, y_train)
+print("time for fitting: %.2f sec" % (time.time() - start_time))
+```
+result- time for fitting: 0.04 sec
+
+## The training Results
+```python
+y_predict = adaline_algo.predict(X_train)
+print("training Results: %.2f percents" % (metrics.accuracy_score(y_train, y_predict)*100))
+```
+result- training Results: 78.79 percents
+## The testing Results:
+```python
+y_predict = adaline_algo.predict(X_test)
+print("Accuracy of Adaline algorithm with split: %.2f percents" % (metrics.accuracy_score(y_test, y_predict)*100))
+cv=cross_val_score(adaline_algo, X, y, cv=3, scoring='accuracy').mean()
+print("Accuracy of Adaline algorithm with cross-validation: %.2f percents"  % (cv*100))
+print("Standart Deviation of Adaline algorithm with cross-validation %.3f precents" % (cross_val_score(adaline_algo, X, y, cv=3, scoring='accuracy').std()*100))
+```
+result- 
+Accuracy of Adaline algorithm with split: 71.21 percents
+Accuracy of Adaline algorithm with cross-validation: 76.26 percents
+Standart Deviation of Adaline algorithm with cross-validation 2.575 precents
+
+## The time that took to get all the model results:
+```python
+adalineFullTime= time.time() - start_time
+print("The time that took to get all the model results: %.3f sec" % (adalineFullTime))
+
+```
+result- The time for getting all the model results: 0.27 sec
+
   1. while we divide the set into two classes: 66% for training and 33% for testing. we saw we have a balancing problem. 
     so we devided the data so that will be enough patients with recurrent in the training set but also to have some in the testing
   
