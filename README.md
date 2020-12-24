@@ -25,23 +25,24 @@ data[2].replace({'N':-1,'R':1},inplace=True)
 data = data.drop([1, 3], axis = 1)
 ```
 #devided the data to two class (33% and 66%%)
+```python
 scaler = StandardScaler()
-
 X = scaler.fit_transform(data.iloc[:, 1:].values)
 y = data.iloc[:, 0].values
-
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33, random_state = 1 )
-
 freqs = pandas.DataFrame({"Training dataset": [(y_train == 1).sum(),(y_train == -1).sum()],
                       "Test dataset": [(y_test == 1).sum(),(y_test == -1).sum()],
                       "Total": [(y_train == 1).sum()+(y_test == 1).sum(),(y_train == -1).sum()+(y_test == -1).sum()]},
                      index=["Recurrent", "Nonrecurrent"])
 freqs[["Training dataset", "Test dataset", "Total"]]
-
-from numpy.random import seed
-
+```
+Adaline  Parameters:
+    ------------
+    learning_rate : The learning rate (between 0 and 1)
+    num_iterations : Passes over the training dataset.
+    
+```python
 class Adaline(object):
-    """Adaptive Linear Neuron Classifier.
 
     Parameters:
     ------------
